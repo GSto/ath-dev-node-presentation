@@ -14,6 +14,7 @@ var express = require('express')
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+
 /*
  * Heroku requirement
  * https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
@@ -24,9 +25,6 @@ io.configure(function () {
 });
 
 process.env.PWD = process.cwd();
-console.log("-----PROCESS-----");
-console.log(process.env.PWD);
-console.log(path.join(process.env.PWD,'public'));
 
 //express.js configuration options
 app.configure(function(){
@@ -38,7 +36,6 @@ app.configure(function(){
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
-  //app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.static(path.join(process.env.PWD,'public')));
 });
 

@@ -4,7 +4,7 @@
  */
 
 exports.index = function(req, res){
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Athens Developers Node.js Presentation' });
 };
 
 exports.controller = function(req, res) {

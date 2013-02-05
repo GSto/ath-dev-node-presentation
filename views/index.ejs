@@ -6,15 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=1024, user-scalable=no">
     <link rel="stylesheet" href="/javascripts/vendor/deckjs/core/deck.core.css" />
-    <!-- Style theme. More available in /themes/style/ or create your own. -->
-    <link rel="stylesheet" href="/javascripts/vendor/deckjs/themes/style/swiss.css" /> 
+    <!--Style theme. More available in /themes/style/ or create your own. -->
+    <link rel="stylesheet" href="/javascripts/vendor/deckjs/themes/style/swiss.css" />
     
     <!-- Transition theme. More available in /themes/transition/ or create your own. -->
     <link rel="stylesheet" href="/javascripts/vendor/deckjs/themes/transition/fade.css" />
 
-    <link rel="stylesheet" href="/javascripts/vendor/deckjs/extensions/navigation/deck.navigation.css">
+    <link rel="stylesheet" href="/javascripts/vendor/deckjs/extensions/navigation/deck.navigation.css" />
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/default.min.css" />
+    <link rel="stylesheet" href="http://softwaremaniacs.org/media/soft/highlight/styles/monokai.css" />
     <link rel='stylesheet' href='/stylesheets/style.css' />
-
+    <script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
     <!-- Required Modernizr file -->
     <script src="/javascripts/vendor/deckjs/modernizr.custom.js"></script>
   </head>
@@ -30,7 +32,7 @@
 	  <li><strong>What is Node.js?</strong></li>
 	  <li>Examples</li>
 	  <li>Modules</li>
-	  <li>npm (Node Package Manager)</li>
+	  <li>NPM</li>
 	  <li>Express</li>
 	</ol>
       </section>
@@ -62,13 +64,13 @@
       <section class="slide">
 	<h2>'Hello World' example</h2>
 	<h3>app.js</h3>
-	<pre>
-	  var http = require('http'); //require is a part of Node.js, which allows you to include modules
-	  http.createServer(function(request, response) { 
-	  res.writeHead(200, {'Content-Type': 'text/plain'});
-	  res.end("Hello, World!");
-          }).listen(3000, '127.0.0.1');
-	  console.log('server running at 127.0.0.1:3000');
+	<pre class="javascript">
+var http = require('http'); //require is a part of Node.js, which allows you to include modules
+http.createServer(function(request, response) { 
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+   res.end("Hello, World!");
+}).listen(3000, '127.0.0.1');
+console.log('server running at 127.0.0.1:3000');
 	</pre>
       </section>
 
@@ -91,12 +93,11 @@
 	<h2>The Greeter Module</h2>
 	<h3>greeter.js</h3>
 	<pre>
-	  function sayHello(name) {
-	  return "Hello, " + name;
-	  }
-	  module.exports = {
-	  sayHello : sayHello
-	  };
+module.exports = {
+  sayHello : function(name) {
+    return "Hello, " + name;
+  }
+};
 	</pre>
       </section>
 
@@ -109,21 +110,20 @@
 	<h2>Hello App (Updated)</h2>
         <h3>app.js</h3>
 	<pre>
-	  var http = require('http');  
-	  var url = require('url');
-	  var greeter = require('./greeter'); //note the explicit path on this one
+var http = require('http');  
+var url = require('url');
+var greeter = require('./greeter'); //note the explicit path on this one
 	  
-	  http.createServer(function(request, response) { 
-	  res.writeHead(200, {'Content-Type': 'text/plain'});
-	  //the second argument tells url.parse to return the query as JSON {name: 'tim'} instead of a string '?name=tim'
-	  var query = url.parse(request.url, true).query;  
-	  if(query.name !== undefined) {
-	  res.end(greeter.sayHello(name));
-	  } else {
-	  res.end("Hello, World!");
-          }
-          }).listen(3000, '127.0.0.1');
-	  console.log('server running at 127.0.0.1:3000');
+http.createServer(function(request, response) { 
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+    var query = url.parse(request.url, true).query;  
+    if(query.name !== undefined) {
+      res.end(greeter.sayHello(name));
+    } else {
+      res.end("Hello, World!");
+    }
+}).listen(3000, '127.0.0.1');
+console.log('server running at 127.0.0.1:3000');
 	</pre>
       </section>
 
@@ -166,20 +166,25 @@
 	<h2>Example package.json</h2>
 	<h3>package.json of this presentation:</h3>
 	<pre>
-	  {
-	  "name": "Node.js Presentation",
-	  "description" : "presentation on Node.js for Athens Developers Group",
-	  "author" : "Glenn Stovall <glennstovall@gmail.com>"
-	    "version": "0.0.1",
-	    "private": true,
-	    "scripts": {
-	    "start": "node app"
-	    },
-	    "dependencies": {
-	    "express": "3.0.6",
-	    "ejs": "*"
-	    }
-	    }
+{
+    "name": "athens-dev-presentation",
+    "description" : "presentation on Node.js for Athens Developers Group",
+    "author" : "Glenn Stovall <glennstovall@gmail.com>",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+	"start": "node app"
+    },
+    "dependencies": {
+	"express": "3.0.6",
+	"ejs": "*",
+	"socket.io" : "*"
+    },
+    "engines": {
+	"node": "0.8.14",
+	"npm": "1.1.65"
+    }
+}
 	</pre>
       </section>
 
@@ -228,52 +233,38 @@
 	<h2>'Hello' example in Express</h2>
 	<h3>app.js (express default)</h3>
 	<pre>
-	  var express = require('express')
-	  , routes = require('./routes')
-	  , user = require('./routes/user')
-	  , http = require('http')
-	  , path = require('path');
+var express = require('express')
+//other modules...
 
-	  var app = express();
+var app = express();
 
-	  //express configuration options
-	  app.configure(function(){
-	  app.set('port', process.env.PORT || 3000);
-	  app.set('views', __dirname + '/views');
-	  app.set('view engine', 'ejs');
-	  app.use(express.favicon());
-	  app.use(express.logger('dev'));
-	  app.use(express.bodyParser());
-	  app.use(express.methodOverride());
-	  app.use(app.router);
-	  app.use(express.static(path.join(__dirname, 'public')));
-	  });
+//express configuration options..
 
-	  app.configure('development', function(){
-	  app.use(express.errorHandler());
-	  });
+//routing
+app.get('/', routes.index);
+app.get('/users', user.list);
 
-	  //routing
-	  app.get('/', routes.index);
-	  app.get('/users', user.list);
-
-	  //start the server
-	  http.createServer(app).listen(app.get('port'), function(){
-	  console.log("Express server listening on port " + app.get('port'));
-	  });
+//start the server
+http.createServer(app).listen(app.get('port'), function(){
+  console.log("Express server listening on port " + app.get('port'));
+});
 	</pre>
       </section>
 
       <!-- End -->
       <section class="slide">
 	<h2>Resources</h2>
+	<ul>
+	  <li>Tutorials <a href='http://howtonode.org/' target='_blank'>howtonode.org</a></li>
+	  <li>Hosting <a href='http://nodejitsu.com/' target='_blank'>nodejitsu.com</a></li>
+	  <li>NPM Registry <a href='https://npmjs.org/' target='_blank'>https://npmjs.org/</a></li>
+	</ul>
       </section>
       
       <section class="slide">
 	<h2>Available on Github</h2>
 	<ul>
 	  <li>This Presentation: <a href='#'>http://github.com/gsto/</a></li>
-	  <li>Greeter Example: <a href='#'>http://github.com/gsto/</a></li>
       </section>
       
       <!-- deck.navigation snippet -->
