@@ -54,8 +54,8 @@ app.get('/socket.io/socket.io.js', function(req, res) {
 
 //socket.io server
 io.sockets.on('connection', function (socket) {
-    socket.on('next_slide', function(data) {
-	io.sockets.emit('advance_slide', data);
+    socket.on('change_slide', function(data) {
+	io.sockets.emit('move_slide', data);
     });
 });
 
