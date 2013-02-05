@@ -1,4 +1,4 @@
-var socket = io.connect(null, { port: 14930 });
+var socket = io.connect();
 $(function() {
     $("#next").click(function(e) {
 	e.preventDefault();

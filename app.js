@@ -14,9 +14,6 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
-server.listen(14930);
-console.log('socket.io server listening on port 14930');
-
 //express.js configuration options
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -59,8 +56,8 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-//launch express.js
-http.createServer(app).listen(app.get('port'), function(){
+//launch express js
+server.listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
 });
 

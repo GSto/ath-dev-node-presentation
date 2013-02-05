@@ -1,4 +1,4 @@
-var socket = io.connect(null, { port: 14930 });
+var socket = io.connect();
 $(function() {
     $.deck('.slide');
     socket.on('move_slide', function(data) {
