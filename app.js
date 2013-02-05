@@ -13,10 +13,9 @@ var express = require('express')
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
-var fs = require('fs');
 
-server.listen(3001);
-console.log('socket.io server listening on port 3001');
+server.listen(8080);
+console.log('socket.io server listening on port 8080');
 
 //express.js configuration options
 app.configure(function(){
@@ -39,7 +38,7 @@ app.configure('development', function(){var fs = require('fs');
 app.get('/', routes.index);
 app.get('/controller', routes.controller);
 
-//hack because there is a bug in express
+//hack because there is a bug in express relating to pulling in JavaScript files for client-side use
 app.get('/socket.io/socket.io.js', function(req, res) {
     fs.readFile(path.join(__dirname,'node_modules','/socket.io/node_modules/socket.io-client/dist/socket.io.js'), function(error, content) {
         if (error) {
@@ -53,11 +52,9 @@ app.get('/socket.io/socket.io.js', function(req, res) {
     });
 });
 
-//socket.io
+//socket.io server
 io.sockets.on('connection', function (socket) {
-    socket.emit('test', {});
     socket.on('next_slide', function(data) {
-	console.log('advance slide recieved');
 	io.sockets.emit('advance_slide', data);
     });
 });
