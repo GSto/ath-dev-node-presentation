@@ -14,8 +14,8 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
-server.listen(8080);
-console.log('socket.io server listening on port 8080');
+server.listen(14930);
+console.log('socket.io server listening on port 14930');
 
 //express.js configuration options
 app.configure(function(){
