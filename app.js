@@ -24,7 +24,8 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
+  //app.use(express.static(path.join(__dirname, 'public')));
+  app.use(express.static(path.join(process.env.PWD,'public'));
 });
 
 app.configure('development', function(){var fs = require('fs');
