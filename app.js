@@ -14,6 +14,14 @@ var express = require('express')
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+/*
+ * Heroku requirement
+ * https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
+ */
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
 
 process.env.PWD = process.cwd();
 console.log("-----PROCESS-----");
