@@ -2,9 +2,7 @@
 /**
  * Module dependencies.
  */
-process.env.PWD = process.cwd();
-console.log("-----PROCESS-----");
-console.log(process.env.PWD);
+
 
 var express = require('express')
   , routes = require('./routes')
@@ -16,6 +14,11 @@ var express = require('express')
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+
+process.env.PWD = process.cwd();
+console.log("-----PROCESS-----");
+console.log(process.env.PWD);
+console.log(path.join(process.env.PWD,'public'));
 
 //express.js configuration options
 app.configure(function(){
