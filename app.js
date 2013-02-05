@@ -2,6 +2,7 @@
 /**
  * Module dependencies.
  */
+process.env.PWD = process.cwd();
 
 var express = require('express')
   , routes = require('./routes')
